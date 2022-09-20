@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body{
+            background: black;
+            color: royalblue;
+            background-image: url("/media/grafika/tlo.png");
+            background-size: 70%;
+            background-position: top;
+            background-position-x: center;
+            background-repeat: no-repeat;
+        }
+        label[for=id_username]{
+            display: inline-block;
+            position: absolute;
+            top: 30.5%;
+            left: 42%;
+        }
+        #id_username{
+            display: inline-block;
+            position: absolute;
+            top: 30%;
+            left: 52%;
+            transform: translateX(-50%);
+            border-radius: 15px;
+            height: 20px;
+            text-align: center;
+
+        }
+        label[for=id_password]{
+            display: inline-block;
+            position: absolute;
+            top: 35.5%;
+            left: 42%;
+
+        }
+        #id_password{
+            display: inline-block;
+            position: absolute;
+            top: 35%;
+            left: 52%;
+            transform: translateX(-50%);
+            height: 20px;
+            border-radius: 15px;
+            text-decoration-style: dotted;
+            text-align: center;
+        }
+        .login{
+            width: 15%;
+            height: 25px;
+            border-radius: 15px;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+    </style>
+</head>
+<body>
+    <form method="post">
+        {%  csrf_token %}
+        {{ form }}
+        <button class="login" type="submit">Zaloguj</button>
+    </form>
+</body>
+</html>

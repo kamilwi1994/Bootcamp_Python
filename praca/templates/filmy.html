@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'moj.css' %}">
+    <script src="https://kit.fontawesome.com/985d9b93c7.js" crossorigin="anonymous"></script>
+    <style>
+        .filmy{
+    float: left;
+}
+body{
+    background-color: black;
+    margin: 0% 5%;
+}
+h2{
+    text-align: center;
+    font-size: 25px;
+    font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+    letter-spacing: 1px;
+    text-transform: capitalize;
+    color: crimson;
+}
+
+.plakat{
+    margin-top: 50px;
+    position: relative;
+    float: left;
+    z-index: 0;
+    transition-duration: 0.3s;
+}
+.plakat:hover{
+    z-index: 5;
+}
+.plakat img{
+    height: 450px;
+    width: 320px;
+    margin: 10px;
+    object-fit: cover;
+    opacity : 0.70;
+    transition-duration: 0.3s;
+
+}
+.plakat img:hover{
+    opacity: 1;
+    transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+
+
+}
+
+
+.hover{
+    display: none;
+    z-index: 5;
+    background-color: black;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 90%;
+    width: 80%;
+}
+.wrap{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+.video_v{
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 70vh;
+    width: 100%;
+}
+.hover h3{
+    display: inline-block;
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    text-align: center;
+    font-size: 25px;
+
+}
+.hover p{
+    display: inline-block;
+    position: absolute;
+    top: 78%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 50px;
+    color: white;
+
+}
+
+.hover a{
+    display: block;
+    color: white;
+    top: 90%;
+    left:3%
+}
+.hover .edytuj{
+    display: block;
+    color: white;
+    top: 87%;
+    left:92%;
+    transform: translateX(-50%);
+}
+.hover .usun{
+    display: block;
+    color: white;
+    top: 87%;
+    left:8%
+}
+.close{
+    display: inline-block;
+    position: absolute;
+    top: 0%;
+    right: 5%;
+    color: white;
+    z-index: 10;
+    font-size: 25px;
+    cursor: pointer;
+
+}
+i{
+    font-size: 25px;
+}
+.fa-plus{
+    display: block;
+    font-size: 30px;
+    position: absolute;
+    top: 3%;
+    left: 4%;
+}
+.fa-plus:hover{
+    color: rebeccapurple;
+}
+
+.blur{
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: -20px;
+    left: -12%;
+    background-color: black;
+    opacity: 0.7;
+}
+.fa-times:hover{
+    color: gray;
+}
+.fa-trash:hover{
+    color: red;
+}
+.fa-edit:hover{
+    color: rebeccapurple;
+}
+.logout{
+    display: block;
+    position: absolute;
+    top: 6%;
+    right: 5%;
+    text-decoration: none;
+    font-size: 20px;
+
+}
+.witaj{
+    display: inline-block;
+    position: absolute;
+    top: 0%;
+    right: 3%;
+    text-transform: capitalize;
+    font-size: 20px;
+    color: whitesmoke;
+
+}
+    </style>
+</head>
+<body>
+    <p class="witaj"> Witaj {{ user.username }}</p>
+    <a class="logout" href="{% url 'logout' %}">Logout</a>
+    <a href="{% url 'nowy_film' %}"><i class="fas fa-plus"></i></a>
+    {% if filmy|length == 0%}
+    <h2> Brak filmów </h2>
+    {% else %}
+    <h2> Ilość filmów : {{ filmy|length }} </h2>
+
+    <div class="filmy">
+    {% for film in filmy %}
+        <div class="plakat">
+        <img onclick="myFunction{{ film.id }}()" src="/media/{{ film.plakat }}">
+        </div>
+
+        <div id="plakat_{{ film.id }}" class="hover">
+            <div class="wrap">
+            <div class="blur" onclick="close_video{{ film.id }}()"></div>
+            <div class="close" onclick="close_video{{ film.id }}()"><i class="fas fa-times"></i></div>
+            <div class="video">
+            <video class="video_v" id="video_{{ film.id }}" controls poster="/media/{{ film.plakat }}">
+            <source src="/media/{{ film.video }}" type="video/mp4">
+            Your browser does not support the video tag.
+            </video>
+
+
+            <div class="opis_filmu"></div>
+            <h3>{{ film }}</h3>
+            <p class="opis">{{ film.opis }}</p>
+            <p class="edytuj"><a href="{% url 'edytuj_film' film.id %}"><i class="fas fa-edit"></i></a></p>
+            <p class="usun"><a href="{% url 'usun_film' film.id %}"><i class="fas fa-trash"></i></a></p>
+            </div>
+            </div>
+        </div>
+</div>
+    {% endfor %}
+    {% endif %}
+<script>
+    {% for film in filmy %}
+function myFunction{{ film.id }}(){
+    document.getElementById("plakat_{{ film.id }}").style.display = "block" ;
+
+}
+
+function close_video{{ film.id }}(){
+    document.getElementById("plakat_{{ film.id }}").style.display = "none" ;
+    document.getElementById("video_{{ film.id }}").pause();
+}
+{% endfor %}
+</script>
+</body>
+</html>

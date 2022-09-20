@@ -1,0 +1,14 @@
+.filmy{
+    float: left;
+}
+.video-player{
+
+}
+.plakat{
+    position: relative;
+}
+.plakat h1{
+    position: absolute;
+    top: 0;
+    left: 50%;
+}
